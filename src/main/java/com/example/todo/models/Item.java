@@ -1,9 +1,23 @@
 package com.example.todo.models;
 
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table
 public class Item {
+
+    @Id
+    @SequenceGenerator(
+            name = "item_seq",
+            sequenceName = "item_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "item_seq"
+    )
     private Long id;
     private String desc;
     private Status status;

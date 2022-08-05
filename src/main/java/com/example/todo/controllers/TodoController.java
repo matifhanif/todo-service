@@ -1,6 +1,8 @@
 package com.example.todo.controllers;
 
 import com.example.todo.models.Item;
+import com.example.todo.services.TodoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +16,16 @@ import java.util.List;
 @RequestMapping(path = "api/v1/todo")
 public class TodoController {
 
+    private final TodoService todoService;
+
+    @Autowired
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
 
     @GetMapping(path ="items")
     public List<Item> getItems() {
-        return List.of(new Item());
+        return todoService.getItems();
     }
 
     @GetMapping(path ="item/{id}")
@@ -25,20 +33,20 @@ public class TodoController {
         return new Item();
     }
 
-    @PostMapping(path = "item/{id}")
-    public void AddItem(@PathVariable(name = "id")  Long itemId) {
-
+    @PostMapping(path = "item")
+    public void AddItem(@RequestBody Item item) {
+        todoService.addItem(item);
     }
 
     @PutMapping (path = "item/{id}/desc")
     public void changeItemDesc(@PathVariable(name = "id") Long itemId,
-                               @RequestParam(required = false) String desc) {
-
+                               @RequestParam(required = true) String desc) throws Exception {
+        todoService.updateItemDesc(itemId, desc);
     }
 
     @PutMapping (path = "item/{id}/status")
     public void changeItemStatus(@PathVariable(name = "id") Long itemId,
-                                 @RequestParam(name = "statusCode", required = true) @Min(1) @Max(3) int statusCode) {
-
+                                 @RequestParam(name = "statusCode", required = true) @Min(1) @Max(3) int statusCode) throws Exception {
+        todoService.updateItemStatus(itemId, statusCode);
     }
 }
