@@ -1,7 +1,10 @@
 package com.example.todo.models;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,10 +22,18 @@ public class Item {
             generator = "item_seq"
     )
     private Long id;
+
+    @NotBlank (message = "Invalid description")
     private String desc;
+
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
+
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dtCreated;
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dtDue;
+
     private LocalDateTime dtCompleted;
 
 

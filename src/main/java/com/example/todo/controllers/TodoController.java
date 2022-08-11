@@ -34,7 +34,7 @@ public class TodoController {
     }
 
     @PostMapping(path = "item")
-    public void AddItem(@RequestBody Item item) {
+    public void AddItem(@RequestBody Item item) throws Exception {
         todoService.addItem(item);
     }
 
@@ -46,7 +46,7 @@ public class TodoController {
 
     @PutMapping (path = "item/{id}/status")
     public void changeItemStatus(@PathVariable(name = "id") Long itemId,
-                                 @RequestParam(name = "statusCode", required = true) @Min(1) @Max(3) int statusCode) throws Exception {
+                                 @RequestParam(name = "statusCode", required = true) @Min(0) @Max(1) int statusCode) throws Exception {
         todoService.updateItemStatus(itemId, statusCode);
     }
 }
