@@ -2,14 +2,15 @@ package com.example.todo.controllers;
 
 import com.example.todo.models.Item;
 import com.example.todo.services.TodoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Validated
@@ -23,14 +24,17 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    @GetMapping(path ="items")
-    public List<Item> getItems() {
+    @GetMapping(path = {"items","items/{status}"})
+    public List<Item> getItems(@PathVariable(name = "status",required = false) Optional<String> status) {
+        if (status.isPresent() && StringUtils.equals(status.get(), "notdone")) {
+            return todoService.getNotDoneItems();
+        }
         return todoService.getItems();
     }
 
     @GetMapping(path ="item/{id}")
-    public Item getItem(@PathVariable(name = "id")  Long itemId) {
-        return new Item();
+    public Optional<Item> getItem(@PathVariable(name = "id")  Long itemId) throws Exception {
+        return todoService.getItem(itemId);
     }
 
     @PostMapping(path = "item")
