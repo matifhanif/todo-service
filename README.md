@@ -6,6 +6,7 @@ RESTful API to manage todo list.
 * Build tool: Maven 
 * Framework: Spring Boot 
 * Database: H2 (in-memory)
+* Docker
  
 Key Libraries: 
 * Spring Boot Data JPA
@@ -68,6 +69,9 @@ Key Libraries:
 
 ### Build service
 
+> docker build -t todoService:1.0 .
+
 
 ### Run service locally
 
+> docker run -p 8080:8080 todoService:1.0
